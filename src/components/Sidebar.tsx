@@ -3,7 +3,7 @@ import { ChatList } from "./ChatList";
 
 export function Sidebar() {
   return (
-    <div className="flex max-w-[428px] w-full">
+    <div className="flex w-[68px] md:max-w-[428px] md:w-full">
       <div className="flex flex-col w-[68px] items-center justify-between">
         <div className="flex flex-col items-center justify-center w-full p-[2px] text-neutral-600">
           <button className="flex flex-col w-full h-[56px] items-center justify-center hover:bg-slate-50 hover:text-indigo-700">

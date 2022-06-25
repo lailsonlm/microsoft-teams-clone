@@ -6,7 +6,7 @@ export default function App() {
   return (
     <div className="flex flex-col h-screen">
       <Header />
-      <main className="flex flex-1">
+      <main className="flex flex-1 overflow-hidden">
         <Sidebar />
         <Chat />
       </main>
