@@ -1,9 +1,17 @@
+import { User } from "firebase/auth";
 import { MagnifyingGlass } from "phosphor-react";
+import { useState } from "react";
 import { Avatar } from "./Avatar";
 
-export function Header() {
+interface HeaderProps {
+  user: User | null;
+  handleSignOut: () => Promise<void>;
+}
+
+export function Header({ user, handleSignOut }: HeaderProps) {
+  const [openSignOutButton, setOpenSignOutButton] = useState(false)
   return (
-    <header className="w-full flex bg-indigo-800 h-12 items-center justify-center">
+    <header className="w-full flex bg-indigo-800 h-12 items-center justify-center relative">
       <div className="flex w-[68px] lg:max-w-[428px] lg:w-full"/>
       <div className='flex-1 h-8 items-center justify-center rounded-md bg-indigo-200'>
         <label htmlFor="search" className="sr-only">
@@ -28,10 +36,23 @@ export function Header() {
       </div>
       <div className="flex max-w-[254px] xl:max-w-[428px] w-full h-full items-center justify-end pr-2 gap-2">
         <span className="text-white font-semibold text-lg mb-3">...</span>
-        <button className="h-full px-2 hover:bg-indigo-900">
-          <Avatar name="Lailson Sobral" header />
+        <button 
+          onClick={() => setOpenSignOutButton(!openSignOutButton)}
+          className="h-full px-2 hover:bg-indigo-900"
+        >
+          <Avatar avatarURL={user && user.photoURL || undefined} header />
         </button>
       </div>
+      {
+        openSignOutButton &&
+        <button 
+          onClick={handleSignOut}
+          className="w-40 p-2 bg-white rounded absolute right-1 -bottom-11 shadow-md hover:bg-indigo-100 font-semibold"
+        >
+          Sair
+      </button>
+      }
+
     </header>
   )
 }

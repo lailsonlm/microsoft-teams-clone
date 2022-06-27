@@ -1,28 +1,49 @@
 import { collection, addDoc, query, onSnapshot, serverTimestamp, orderBy } from 'firebase/firestore'
 import { PaperPlaneRight, PencilSimple, Plus, UserPlus } from 'phosphor-react'
-import { FormEvent, useEffect, useState } from 'react'
+import { FormEvent, useEffect, useRef, useState } from 'react'
 import { Avatar } from './Avatar'
 import { db } from '../services/firebase'
 import comunidev_profile from '../assets/comunidev_profile.png'
+import { User } from 'firebase/auth'
 
 interface MessagesList {
   idMessage: string;
-  user: string;
+  username: string;
   message: string;
   created_at: string;
+  avatarURL: string;
+  userId: string;
 }
 
-export function Chat() {
+interface ChatProps {
+  user: User | null;
+}
+
+export function Chat({ user }: ChatProps) {
   const [message, setMessage] = useState('')
   const [messagesList, setMessagesList] = useState<MessagesList[]>()
+  const messagesRef = useRef<null | HTMLDivElement>(null)
+
+  useEffect(() => {
+    messagesRef.current?.scrollIntoView({
+      behavior: "smooth"
+    })
+  }, [messagesList])
 
   async function sendMessage() {
     try {
       await addDoc(collection(db, "messages"), {
-        user: "lailsonlm",
+        username: user?.displayName,
+        avatarURL: user?.photoURL,
+        userId: user?.uid,
         message: message,
         created_at: serverTimestamp()
       });
+
+      messagesRef.current?.scrollIntoView({
+        behavior: "smooth"
+      })
+
     } catch (error) {
       console.error(error);
     }
@@ -80,16 +101,16 @@ export function Chat() {
           </div>
         </div>
 
-        <div className="flex flex-1 p-5 overflow-y-scroll">
+        <div className="flex flex-1 p-5 overflow-y-scroll mb-2">
           <ul className="flex flex-col gap-3 w-full">
             {messagesList ? 
               messagesList.map(message => {
                 return (
-                  message.user !== 'lailsonlm' ? 
+                  message.userId !== user?.uid ? 
                   <li key={message.idMessage} className="flex gap-3 items-center">
-                    <Avatar name={message.user} />
+                    <Avatar avatarURL={message.avatarURL} />
                     <div className="bg-white p-2 rounded">
-                      <p className="font-semibold">{message.user}</p>
+                      <p className="font-semibold">{message.username}</p>
                       <p className="max-w-4xl">{message.message}</p>
                     </div>
                   </li>
@@ -106,6 +127,7 @@ export function Chat() {
                 Nenhuma mensagem enviada até o momento
               </p>
             }
+            <div ref={messagesRef} />
           </ul>
         </div>
 
