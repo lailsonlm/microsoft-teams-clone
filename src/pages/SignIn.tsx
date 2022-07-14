@@ -8,8 +8,8 @@ export function SignIn() {
   const auth = getAuth();
   const navigate = useNavigate()
 
-  async function handleSignIn() {
-    await signInWithPopup(auth, provider)
+  function handleSignIn() {
+    signInWithPopup(auth, provider)
       .then((result) => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential?.accessToken;

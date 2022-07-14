@@ -5,7 +5,7 @@ import { Avatar } from "./Avatar";
 
 interface HeaderProps {
   user: User | null;
-  handleSignOut: () => Promise<void>;
+  handleSignOut: () => void;
 }
 
 export function Header({ user, handleSignOut }: HeaderProps) {
@@ -40,7 +40,7 @@ export function Header({ user, handleSignOut }: HeaderProps) {
           onClick={() => setOpenSignOutButton(!openSignOutButton)}
           className="h-full px-2 hover:bg-indigo-900"
         >
-          <Avatar avatarURL={user && user.photoURL || undefined} header />
+          {user?.photoURL && <Avatar avatarURL={user.photoURL} header />}
         </button>
       </div>
       {

@@ -21,8 +21,8 @@ export default function Home() {
     });
   }, [])
 
-  async function handleSignOut() {
-    await signOut(auth)
+  function handleSignOut() {
+    signOut(auth)
     .then(() => {
       navigate('/')
       setUser(null)
